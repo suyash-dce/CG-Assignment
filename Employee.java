@@ -1,20 +1,21 @@
 import java.util.Scanner;
-public class Employee {
-	
-	public static final int IS_FULL_TIME=1;
-	public static final int IS_PART_TIME=2;
-	int EmpRatePerHour=20;
-	int MaxDays;
-	int MaxHours;
-	String company;
-	int TotalEmpWage;
-	
-	public Employee(String company,int EmpRatePerHour,int maxDays,int maxHours) {
+public class Employee{
+	final int IS_FULL_TIME=1;
+	final int IS_PART_TIME=2;
+
+	final int empRatePerHour;
+	final int maxHours;
+    final int maxDays;
+	final String company;
+	int totalEmpWage;
+
+	public Employee(String company,int empRatePerHour,int maxDays,int maxHours) {
 		this.company=company;
-		this.EmpRatePerHour=EmpRatePerHour;
-		this.MaxHours=MaxHours;
-		this.MaxDays=MaxDays;
+		this.empRatePerHour=empRatePerHour;
+		this.maxHours=maxHours;
+		this.maxDays=maxDays;
 	}
+
 	public int empAttendance() {
 		int empCheck=(int) Math.floor(Math.random()*10)%3;
 		return empCheck;
@@ -34,37 +35,21 @@ public class Employee {
 			System.out.println("Employee is absent");
 		}
 	}
-	public int daliyWage(int n) {
-		final int partTimeHours=4;
-	        final int fullTimeHours=8;
-		int empWage=0;
-		switch (n) {
-		case IS_FULL_TIME:
-			empWage = (EmpRatePerHour*fullTimeHours);
-			break;
-		case IS_PART_TIME:
-			empWage= (EmpRatePerHour*partTimeHours);
-			break;
-		default:
-			break;
-		}
-		return empWage;
-	}
 	public void monthlyWage() {
 		final int partTimeHours=4;
                 final int fullTimeHours=8;
 		int days = 0;
 		int hours=0;
 		int monthlyWage = 0;
-		while (hours<=MaxHours || days<=MaxDays) {
+		while (hours<=maxHours || days<=maxDays) {
 			int n=empAttendance();
 			switch (n) {
 			case IS_FULL_TIME:
-				monthlyWage+=daliyWage(n);
+				monthlyWage+=(empRatePerHour*fullTimeHours);
 				hours+=fullTimeHours;
 				break;
 			case IS_PART_TIME:
-				monthlyWage+=daliyWage(n);
+				monthlyWage+=(empRatePerHour*partTimeHours);
 				hours+=partTimeHours;
 				break;
 			default:
@@ -72,8 +57,9 @@ public class Employee {
 			}
 			days++;
 		}
-		this.TotalEmpWage=monthlyWage;
+		this.totalEmpWage=monthlyWage;
 	}
+	
 	public static void main(String[] args) {
 		
 		Scanner sc = new Scanner(System.in);
@@ -87,7 +73,8 @@ public class Employee {
 		int HoursWorked= sc.nextInt();
 		Employee EmployeeWageFn = new Employee(name,RatePerHour,DaysWorked,HoursWorked);
 		EmployeeWageFn.monthlyWage();
-		System.out.println("Dailys Wage of "+name+"'s Employee  is "+EmployeeWageFn.TotalEmpWage); 
+		System.out.println("Dailys Wage of "+name+"'s Employee  is "+EmployeeWageFn.totalEmpWage); 
 		
 	}
 }
+
