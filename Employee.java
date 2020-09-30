@@ -16,9 +16,15 @@ public class Employee implements ComputeInterface
 
 		CompList.add(CompObj);
 	}
+	public void calculateMonthlyWage() {
+		for (CompanyEmpWage CompObj:CompList) {
+			System.out.println(CompObj);
+			System.out.println();
+			CompObj.setTotalEmpWage(this.calculateMonthlyWage(CompObj));
+		}
+	}
 
-	private int calculateMonthlyWage() {
-		CompanyEmpWage CompObj;
+	private int calculateMonthlyWage(CompanyEmpWage CompObj) {
 		Random ran = new Random();
 		int EmpHr=0; int DailyWage;
 		int DaysWorked=0; int HrsWorked=0;
