@@ -1,66 +1,70 @@
-import java.util.Scanner;
+import java.util.*;
+import java.util.*;
 public class Employee implements ComputeInterface
 { 
 	public static final int IS_FULL_TIME=1;
 	public static final int IS_PART_TIME=2;
 
 	private int numOfCompany=0;
-	private CompanyEmpWage[] companyEmpWageArray;
+	private ArrayList<CompanyEmpWage> CompList = new ArrayList<CompanyEmpWage>();
 
-	public Employee() {
-	companyEmpWageArray= new CompanyEmpWage[5];
+	
+
+	private void addArray(String company,int empRatePerHour,int numOfWorkingDays, int maxHoursPerMonth) {
+
+		CompanyEmpWage CompObj=new CompanyEmpWage(company,empRatePerHour,numOfWorkingDays,maxHoursPerMonth);
+
+		CompList.add(CompObj);
 	}
 
-	private void addCompanyEmpWage(String company,int empRatePerHour,int numOfWorkingDays, int maxHoursPerMonth) {
-
-		companyEmpWageArray[numOfCompany]=new CompanyEmpWage(company,empRatePerHour,numOfWorkingDays,maxHoursPerMonth);
-
-		numOfCompany++;
-	}
-
-	private void computeEmpWage() {
-		for (int i=0;i< numOfCompany; i++) {
-			companyEmpWageArray[i].setTotalEmpWage(this.computeEmpWage(companyEmpWageArray[i]));
-			System.out.println(companyEmpWageArray[i]);
-		}
-	}
-
-	private int computeEmpWage(CompanyEmpWage companyEmpWage) {
-		int empHours=0, totalEmpHours=0, totalWorkingDays=0;
-		while(totalEmpHours<=companyEmpWage.maxWorkingHours && totalWorkingDays<companyEmpWage.maxWorkingDays) {
-			totalWorkingDays++;
-			int empCheck=(int) Math.floor(Math.random() *10)%3;
-			switch (empCheck) {
+	private int calculateMonthlyWage() {
+		CompanyEmpWage CompObj;
+		Random ran = new Random();
+		int EmpHr=0; int DailyWage;
+		int DaysWorked=0; int HrsWorked=0;
+		System.out.println("~~~"+CompObj.companyName+"~~~");
+		
+		do { //Starting loop till condition fulfilled
+		
+			int EmpVal=ran.nextInt(3);			// Creating random int ranging 0 to 2
+			DaysWorked++;
+			System.out.println("Day: "+DaysWorked);
+			
+			switch(EmpVal) {
 				case IS_FULL_TIME:
-					empHours=8;
+					System.out.println("Employee Present.");
+					EmpHr=8;
 					break;
 				case IS_PART_TIME:
-					empHours=4;
-                    break;
+					System.out.println("Employee Present but working Part Time.");
+					EmpHr=8;
+					break;
 				default:
-					empHours=0;
+					System.out.println("Employee Absent.");
+					EmpHr=0;
 			}
-			totalEmpHours+=empHours;
-			System.out.println("Day#: "+ totalWorkingDays+" Emp Hr: " +empHours);
-		}
-		return totalEmpHours*companyEmpWage.wagePerHour;
+			
+			HrsWorked=HrsWorked+EmpHr;
+			DailyWage=EmpHr*CompObj.wagePerHour;
+			CompObj.totalEmpWage=DailyWage+CompObj.totalEmpWage;
+			System.out.println("Total Working Hours: "+HrsWorked);
+			System.out.println("Employee daily wage is "+DailyWage);
+		} while(DaysWorked<=CompObj.maxWorkingDays &&
+				HrsWorked<=CompObj.maxWorkingHours);
+		System.out.println();
+		System.out.println("Employee monthly wage is "+CompObj.totalEmpWage);
+		System.out.println();
+		System.out.println("------------------------------------------------------");
+		return CompObj.totalEmpWage;
 	}
-	
 	public static void main(String[] args) {
+		//creating object companies
+		Employee BuilderObject = new Employee();
+		BuilderObject.addArray("DG Global",20,20,100);
+		BuilderObject.addArray("Mahindra & Mahindra",10,14,200);
+		BuilderObject.addArray("Google Inc.",50,12,80);
 		
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Enter Company Name: ");
-		String name= sc.nextLine();
-		System.out.println("Enter Rate Per Hour: ");
-		int RatePerHour= sc.nextInt();
-		System.out.println("Enter Days Worked: ");
-		int DaysWorked= sc.nextInt();
-		System.out.println("Enter Hours Worked: ");
-		int HoursWorked= sc.nextInt();
-		Employee EmployeeWageFn = new Employee();
-		EmployeeWageFn.addCompanyEmpWage(name,RatePerHour,DaysWorked,HoursWorked);
-		EmployeeWageFn.computeEmpWage(); 
-		
+		//running method
+		BuilderObject.calculateMonthlyWage();
 	}
 }
-
