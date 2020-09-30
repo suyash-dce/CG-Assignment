@@ -7,14 +7,14 @@ public class Employee implements ComputeInterface
 
 	private int numOfCompany=0;
 	private ArrayList<CompanyEmpWage> CompList = new ArrayList<CompanyEmpWage>();
-
-	
+	private Map<String,CompanyEmpWage> CompWageMap=new HashMap<String,CompanyEmpWage>();	
 
 	private void addArray(String company,int empRatePerHour,int numOfWorkingDays, int maxHoursPerMonth) {
 
 		CompanyEmpWage CompObj=new CompanyEmpWage(company,empRatePerHour,numOfWorkingDays,maxHoursPerMonth);
 
 		CompList.add(CompObj);
+		CompWageMap.put(company, CompObj);
 	}
 	public void calculateMonthlyWage() {
 		for (CompanyEmpWage CompObj:CompList) {
@@ -22,6 +22,9 @@ public class Employee implements ComputeInterface
 			System.out.println();
 			CompObj.setTotalEmpWage(this.calculateMonthlyWage(CompObj));
 		}
+	}
+	public int getMonthlyWage(String CompName) {
+		return CompWageMap.get(CompName).totalEmpWage;
 	}
 
 	private int calculateMonthlyWage(CompanyEmpWage CompObj) {
@@ -72,5 +75,13 @@ public class Employee implements ComputeInterface
 		
 		//running method
 		BuilderObject.calculateMonthlyWage();
+		
+		//Getting wages from map
+				System.out.println("Total wage for DG Global is: "+
+						BuilderObject.getMonthlyWage("DG Global"));
+				System.out.println("Total wage for Mahindra & Mahindra is: "+
+						BuilderObject.getMonthlyWage("Mahindra & Mahindra"));
+				System.out.println("Total wage for Google Inc. is: "+
+						BuilderObject.getMonthlyWage("Google Inc."));
 	}
 }
